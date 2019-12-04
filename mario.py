@@ -18,6 +18,5 @@ while True:
     if height != False and height > 0 and height <= 8:
         for i in range(1, height+1):
             print(" " * (height - i), end="")
-            print("#" * i + "  " + "#" * i)      # Here we added 2 spaces and
-                                                 # revert the pyramid
+            print("#" * i + "  " + "#" * i)      # Here we added 2 spaces and revert the pyramid
         break
