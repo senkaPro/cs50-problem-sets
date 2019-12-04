@@ -13,5 +13,5 @@ while True:
     if height != False and height > 0 and height <= 8:
         for i in range(height):
             print(" " * (height - i),end="")
-            print("#" * (i+1))
+            print("#" * (i))
         break
