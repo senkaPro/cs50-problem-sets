@@ -2,12 +2,14 @@
 Making Half-Pyramid with given height
 """
 
+def get_height():
+    height = int(input("Height: "))
+    return height
 
-height = int(input("Height:  "))
-if height > 8 or height < 1:
-    print("Enter value between 1 and 8")
-else:
-    for i in range(height):
-        print(" " * (height - i) + ("#" * (i+1)))
+height = get_height()
+while height < 1 or height > 8:
+    get_height()
+for i in range(height):
+    print(" " * (height - i) + ("#" * (i+1)))
 
 
