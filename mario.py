@@ -11,7 +11,7 @@ def get_int():
 while True:
     height = get_int()
     if height != False and height > 0 and height <= 8:
-        for i in range(1,height):
+        for i in range(1,height+1):
             print(" " * (height - i),end="")
             print("#" * (i))
         break
