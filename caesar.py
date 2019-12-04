@@ -16,7 +16,7 @@ if key < 1 or key > 26:
 
 plaintext = get_string("plaintext:")
 
-print("plaintext: ",end = ' ')
+print("ciphertext: ",end = ' ')
 
 
 for char in plaintext:
