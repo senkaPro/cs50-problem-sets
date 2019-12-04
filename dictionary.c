@@ -55,24 +55,24 @@ bool load(const char *dictionary)
         {
             int index = (word[i] == '\'') ? N - 1 : word[i] - 'a';
 
-            if(children->children[index] == NULL)
+            if (children->children[index] == NULL)
             {
-                node * nextChild = malloc(sizeof(node));
-                if(nextChild == NULL)
+                node *nextChild = malloc(sizeof(node));
+                if (nextChild == NULL)
                 {
                     unload();
                     return false;
                 }
                 nextChild->is_word = false;
 
-                for(int j = 0; j < N; j++)
+                for (int j = 0; j < N; j++)
                 {
                     nextChild->children[j] = NULL;
                 }
 
                 children->children[index] = nextChild;
 
-                if(i == 0)
+                if (i == 0)
                 {
                     root->children[index] = nextChild;
                 }
@@ -94,7 +94,7 @@ bool load(const char *dictionary)
 // Returns number of words in dictionary if loaded else 0 if not yet loaded
 unsigned int size(void)
 {
-    if(!root)
+    if (!root)
     {
         return 0;
     }
@@ -103,12 +103,12 @@ unsigned int size(void)
 
     node *ptr = root;
 
-    if(ptr->is_word)
+    if (ptr->is_word)
     {
         word_count++;
     }
 
-    for(int i = 0; i < N; i++)
+    for (int i = 0; i < N; i++)
     {
         root = ptr->children[i];
 
@@ -123,19 +123,19 @@ unsigned int size(void)
 // Returns true if word is in dictionary else false
 bool check(const char *word)
 {
-    if(!root)
+    if (!root)
     {
         return false;
     }
 
     node *ptr = root;
 
-    for(int i = 0; word[i] != '\0'; i++)
+    for (int i = 0; word[i] != '\0'; i++)
     {
         char c = tolower(word[i]);
         int index = (c == '\'') ? N - 1 : c - 'a';
 
-        if(!ptr->children[index])
+        if (!ptr->children[index])
         {
             return false;
         }
@@ -149,13 +149,13 @@ bool check(const char *word)
 // Unloads dictionary from memory, returning true if successful else false
 bool unload(void)
 {
-    if(!root)
+    if (!root)
     {
         return false;
     }
     node *ptr = root;
 
-    for(int i = 0; i < N; i++)
+    for (int i = 0; i < N; i++)
     {
         root = ptr->children[i];
         unload();
