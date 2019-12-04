@@ -20,12 +20,6 @@ node;
 // Represents a trie
 node *root;
 
-//Tracking dictionary loaded state
-bool loaded = false;
-
-//Tracking word count
-unsigned int word_counter = 0;
-
 // Loads dictionary into memory, returning true if successful else false
 bool load(const char *dictionary)
 {
@@ -55,19 +49,14 @@ bool load(const char *dictionary)
     // Insert words into trie
     while (fscanf(file, "%s", word) != EOF)
     {
-        //set children's value
-        node * children = root;
+        node *children = root;
 
-        //Loop throught char in word
-        for (int i = 0; word[i] != '\0'; i++)
+        for(int i = 0; word[i] != '\0'; i++)
         {
-            //Get char index
-            int index = (word[i] == '\'') ? N-1 : word[i] - 'a';
+            int index = (word[i] == '\'') ? N - 1 : word[i] - 'a';
 
-            //Is the pointer to the char NULL
             if(children->children[index] == NULL)
             {
-                //Create node to be pointed by the char index
                 node * nextChild = malloc(sizeof(node));
                 if(nextChild == NULL)
                 {
@@ -76,57 +65,65 @@ bool load(const char *dictionary)
                 }
                 nextChild->is_word = false;
 
-                for (int j = 0; j < N; j++)
+                for(int j = 0; j < N; j++)
                 {
                     nextChild->children[j] = NULL;
                 }
 
-                //Point the index to the new node
                 children->children[index] = nextChild;
 
-                //If its first char in the word point the root to new node
                 if(i == 0)
                 {
                     root->children[index] = nextChild;
                 }
             }
 
-            //Pointing to the next node
             children = children->children[index];
         }
 
-        //End of the word true
         children->is_word = true;
-        word_counter++;
     }
 
     // Close dictionary
     fclose(file);
 
     // Indicate success
-    loaded = true;
     return true;
 }
 
 // Returns number of words in dictionary if loaded else 0 if not yet loaded
 unsigned int size(void)
 {
-    if (loaded)
-    {
-        return word_counter;
-    }
-    else
+    if(!root)
     {
         return 0;
     }
-    return 0;
+
+    int word_count = 0;
+
+    node *ptr = root;
+
+    if(ptr->is_word)
+    {
+        word_count++;
+    }
+
+    for(int i = 0; i < N; i++)
+    {
+        root = ptr->children[i];
+
+        word_count += size();
+    }
+
+    root = ptr;
+
+    return word_count;
 }
 
 // Returns true if word is in dictionary else false
 bool check(const char *word)
 {
-    //Check if dictionary loaded
-    if(!loaded)
+    if(!root)
     {
         return false;
     }
@@ -135,8 +132,8 @@ bool check(const char *word)
 
     for(int i = 0; word[i] != '\0'; i++)
     {
-        char ch = tolower(word[i]);
-        int index = (ch == '\'') ? N - 1 : ch - 'a';
+        char c = tolower(word[i]);
+        int index = (c == '\'') ? N - 1 : c - 'a';
 
         if(!ptr->children[index])
         {
@@ -152,12 +149,10 @@ bool check(const char *word)
 // Unloads dictionary from memory, returning true if successful else false
 bool unload(void)
 {
-    // TODO
-    if(!loaded)
+    if(!root)
     {
         return false;
     }
-
     node *ptr = root;
 
     for(int i = 0; i < N; i++)
@@ -165,7 +160,9 @@ bool unload(void)
         root = ptr->children[i];
         unload();
     }
+
     root = ptr;
+
     free(ptr);
 
     return true;
