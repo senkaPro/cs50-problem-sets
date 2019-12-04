@@ -11,12 +11,10 @@ if len(sys.argv) != 2:
 
 key = int(sys.argv[1])
 
-if key < 1 or key > 26:
-    sys.exit(1)
 
-plaintext = get_string("plaintext:")
+plaintext = get_string("plaintext: ")
 
-print("ciphertext: ",end = ' ')
+print("ciphertext: ", end ="")
 
 
 for char in plaintext:
