@@ -20,12 +20,12 @@ pennies = 1
 while True:
     change = get_float()
     if change != False and change > 0:
-        coins = math.round(change * 100)
-        change_coins = coins / quarters
+        coins = round(change * 100)
+        change_coins = coins // quarters
         coins_left = coins % quarters
-        if coins_left >= dimes: change_coins += coins_left / dimes
+        if coins_left >= dimes: change_coins += coins_left // dimes
         coins_left %= dimes
-        if coins_left >= nickels: change_coins += coins_left / nickels
+        if coins_left >= nickels: change_coins += coins_left // nickels
         coins_left %= nickels
         change_coins += coins_left
         print(change_coins)
