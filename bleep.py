@@ -6,7 +6,6 @@ import sys
 from cs50 import get_string
 
 
-
 def check_arguments():
     '''Function to check for valid arguments'''
     if len(sys.argv) != 2:
@@ -49,6 +48,7 @@ def main():
         print(word, end=" ")
 
     print()
+
 
 if __name__ == "__main__":
     main()
