@@ -1,5 +1,18 @@
 from nltk.tokenize import sent_tokenize
 
+"""
+Helper function to get substring from a string
+"""
+def stringify(s, n):
+    """Function that get string as a parameter
+        and returns substrings in length n
+    """
+    lst = []
+    for i in range(len(s)):
+        for j in range(len(s) + 1):
+            if len(s[i:j]) == n:
+                lst.append(s[i:j])
+    return lst
 
 def lines(a, b):
     """Return lines in both a and b"""
@@ -42,14 +55,12 @@ def substrings(a, b, n):
 
     uniq = set()
 
-    for i in range(len(a)):
-        for j in range(n):
-            lst = []
-            lst.append(a[j:n])
-            for k in range(len(b)):
-                for l in range(n):
-                    sub_str = b[k:l]
-                    if sub_str in lst:
-                        uniq.add(sub_str)
+    sub_a = stringify(a, n)
+    sub_b = stringify(b, n)
+
+    for i in sub_a:
+        for j in sub_b:
+            if j == i:
+                uniq.add(j)
 
     return list(uniq)
