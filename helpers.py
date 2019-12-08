@@ -1,8 +1,6 @@
 from nltk.tokenize import sent_tokenize
 
-"""
-Helper function to get substring from a string
-"""
+
 def stringify(s, n):
     """Function that get string as a parameter
         and returns substrings in length n
@@ -13,6 +11,7 @@ def stringify(s, n):
             if len(s[i:j]) == n:
                 lst.append(s[i:j])
     return lst
+
 
 def lines(a, b):
     """Return lines in both a and b"""
