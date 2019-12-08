@@ -7,10 +7,15 @@ def lines(a, b):
     # list of sentences in b
     lst_2 = b.split('\n')
 
-    # loop throught the sentences in b and if same sentence in a add it to unique
-    for line in lst_2:
-        if line in lst_1:
-            uniq.add(line)
+    # loop throught the list a and make cash of sentences
+    for line in lst_1:
+        lst = []
+        lst.append(line)
+        # loop throught the list b and check every sentence against the list a cash
+        for line1 in lst_2:
+            if line1 in lst:
+                # if line is in the cash of a means they both similar
+                uniq.add(line)
 
     return list(uniq)
 
