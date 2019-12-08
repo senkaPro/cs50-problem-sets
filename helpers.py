@@ -45,7 +45,7 @@ def substrings(a, b, n):
     for i in range(len(a)):
         for j in range(n):
             lst = []
-            lst.append(a[i:j])
+            lst.append(a[j:n])
             for k in range(len(b)):
                 for l in range(n):
                     sub_str = b[k:l]
