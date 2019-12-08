@@ -40,5 +40,16 @@ def sentences(a, b):
 def substrings(a, b, n):
     """Return substrings of length n in both a and b"""
 
-    # TODO
-    return []
+    uniq = set()
+
+    for i in range(len(a)):
+        for j in range(n):
+            lst = []
+            lst.append(a[i:j])
+            for k in range(len(b)):
+                for l in range(n):
+                    sub_str = b[k:l]
+                    if sub_str in lst:
+                        uniq.add(sub_str)
+
+    return list(uniq)
