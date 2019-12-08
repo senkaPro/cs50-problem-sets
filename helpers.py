@@ -7,11 +7,10 @@ def lines(a, b):
     # list of sentences in b
     lst_2 = b.split('\n')
 
-    # loop throught the sentences in a
-    for line in lst_1:
-        for line1 in lst_2:
-            if line1 in lst_1:
-                uniq.add(line)
+    # loop throught the sentences in b and if same sentence in a add it to unique
+    for line in lst_2:
+        if line in lst_1:
+            uniq.add(line)
 
     return list(uniq)
 
