@@ -81,12 +81,11 @@ def buy():
             user = db.execute("UPDATE users SET cash = cash - :amount WHERE id = :id",
                                 amount = total_amount,
                                 id = session["user_id"])
-        else:
-            return apology("Cannot finish transaction")
-
-
 
             flash("Successful transaction!")
+        elif cash < total_amount:
+            return apology("Cannot finish transaction")
+
         return render_template("layout.html")
 
     if request.method == "GET":
