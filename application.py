@@ -192,8 +192,9 @@ def register():
         session["user_id"] = user["id"]
         session["username"] = user["username"]
         flash("You successfuly registered!")
-        return render_template('layout.html')
-    return render_template("register.html")
+        return redirect('/')
+    else:
+        return render_template("register.html")
 
 
 @app.route("/sell", methods=["GET", "POST"])
