@@ -187,7 +187,7 @@ def register():
         hash = generate_password_hash(password)
 
         user = db.execute("INSERT INTO users (username, hash) VALUES (:username, :hash)",username=username, hash=hash)
-        if not user:
+        if user != None:
             return apology("User already exist!")
         session["user_id"] = user["id"]
         session["username"] = user["username"]
