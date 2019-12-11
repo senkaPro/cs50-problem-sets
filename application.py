@@ -177,11 +177,11 @@ def register():
 
         if not username:
             return apology("Please provide username")
-        if not password:
+        elif not password:
             return apology("Please provide a password")
-        if not confirmation:
+        elif not confirmation:
             return apology("Confirm your password")
-        if password != confirmation:
+        elif password != confirmation:
             return apology("Your passwords don't match")
 
         hash = generate_password_hash(password)
