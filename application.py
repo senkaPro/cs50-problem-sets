@@ -54,20 +54,19 @@ def buy():
     if request.method == "POST":
         symbol = request.form.get("symbol")
         data = lookup(symbol)
-        shares = request.form.get("shares")
-
+        try:
+            shares = int(request.form.get("shares"))
+        except:
+            return apology("You must input a positive integer value")
         if shares <= 0:
-            return apology("Must provide positive number of shares")
-        elif not shares.isnumeric():
-            return apology("Must provide numeric value")
-        elif len(shares) < 1:
-            return apology("Value can't be blank")
+            return apology("Must provide at least one quantity of shares")
+
 
         if data == None:
             return apology("Invalid symbol")
 
         price = data["price"]
-        total_amount = price * int(shares)
+        total_amount = price * shares
 
         user = db.execute("SELECT cash FROM users WHERE id= :user_id",user_id=session["user_id"])
         cash = user[0]["cash"]
@@ -76,7 +75,7 @@ def buy():
                                         VALUES ( :user_id, :stock, :quantity, :price)",
                         user_id = session["user_id"],
                         stock = symbol,
-                        quantity = int(shares),
+                        quantity = shares,
                         price = price)
             if trans == None:
                 return apology("Cannot finish transaction")
