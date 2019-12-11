@@ -52,7 +52,6 @@ def index():
 def buy():
     """Buy shares of stock"""
     if request.method == "POST":
-
         symbol = request.form.get("symbol")
         data = lookup(symbol)
         shares = int(request.form.get("shares"))
@@ -63,23 +62,18 @@ def buy():
         if data == None:
             return apology("Invalid symbol")
 
-
-
         price = data["price"]
         total_amount = price * shares
 
         user = db.execute("SELECT cash FROM users WHERE id= :user_id",user_id=session["user_id"])
         cash = user[0]["cash"]
-        print(price)
         if cash >= total_amount:
-            print("about to make transaction")
             trans = db.execute("INSERT INTO transactions (user_id,stock,quantity,price_bought) \
                                         VALUES ( :user_id, :stock, :quantity, :price)",
                         user_id = session["user_id"],
                         stock = symbol,
                         quantity = shares,
                         price = price)
-
             if trans == None:
                 return apology("Cannot finish transaction")
 
