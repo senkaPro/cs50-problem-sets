@@ -70,22 +70,21 @@ def buy():
 
         user = db.execute("SELECT cash FROM users WHERE id= :user_id",user_id=session["user_id"])
         cash = user[0]["cash"]
-        if cash >= total_amount:
-            trans = db.execute("INSERT INTO transactions (user_id,stock,quantity,price_bought) \
-                                        VALUES ( :user_id, :stock, :quantity, :price)",
-                                                        user_id = session["user_id"],
-                                                        stock = symbol,
-                                                        quantity = shares,
-                                                        price = price)
-
-            user = db.execute("UPDATE users SET cash = cash - :amount WHERE id = :id",
-                                amount = total_amount,
-                                id = session["user_id"])
-
-            flash("Successful transaction!")
-        elif cash < total_amount:
+        if total_amount > cash:
             return apology("Cannot finish transaction")
 
+        trans = db.execute("INSERT INTO transactions (user_id,stock,quantity,price_bought) \
+                                    VALUES ( :user_id, :stock, :quantity, :price)",
+                                                    user_id = session["user_id"],
+                                                    stock = symbol,
+                                                    quantity = shares,
+                                                    price = price)
+
+        user = db.execute("UPDATE users SET cash = cash - :amount WHERE id = :id",
+                            amount = total_amount,
+                            id = session["user_id"])
+
+        flash("Successful transaction!")
         return render_template("layout.html")
 
     if request.method == "GET":
