@@ -44,14 +44,54 @@ if not os.environ.get("API_KEY"):
 @login_required
 def index():
     """Show portfolio of stocks"""
-    return render_template('layout.html')
+    return render_template("layout.html")
 
 
 @app.route("/buy", methods=["GET", "POST"])
 @login_required
 def buy():
     """Buy shares of stock"""
-    return apology("TODO")
+    if request.method == "POST":
+
+        symbol = request.form.get("symbol")
+        data = lookup(symbol)
+        shares = int(request.form.get("shares"))
+
+        if shares <= 0:
+            return apology("Must provide positive number of shares")
+
+        if data == None:
+            return apology("Invalid symbol")
+
+
+
+        price = data["price"]
+        total_amount = price * shares
+
+        user = db.execute("SELECT cash FROM users WHERE id= :user_id",user_id=session["user_id"])
+        cash = user[0]["cash"]
+        print(price)
+        if cash >= total_amount:
+            print("about to make transaction")
+            trans = db.execute("INSERT INTO transactions (user_id,stock,quantity,price_bought) \
+                                        VALUES ( :user_id, :stock, :quantity, :price)",
+                        user_id = session["user_id"],
+                        stock = symbol,
+                        quantity = shares,
+                        price = price)
+
+            if trans == None:
+                return apology("Cannot finish transaction")
+
+            user = db.execute("UPDATE users SET cash = cash - :amount WHERE id = :id",
+                                amount = total_amount,
+                                id = session["user_id"])
+
+            flash("Successful transaction!")
+        return render_template("layout.html")
+
+    if request.method == "GET":
+        return render_template("stock.html")
 
 
 @app.route("/check", methods=["GET"])
@@ -155,7 +195,8 @@ def register():
         user = db.execute("INSERT INTO users (username, hash) VALUES (:username, :hash)",username=username, hash=hash)
         if not user:
             return apology("User already exist!")
-        session["user_id"] = user
+        session["user_id"] = user["id"]
+        session["username"] = user["username"]
         flash("You successfuly registered!")
         return render_template('layout.html')
     return render_template("register.html")
