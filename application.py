@@ -83,7 +83,7 @@ def buy():
         user = db.execute("UPDATE users SET cash = cash - :amount WHERE id = :id",
                             amount = total_amount,
                             id = session["user_id"])
-
+        session["cash"] = user[0]["cash"]
         flash("Successful transaction!")
         return render_template("layout.html")
 
