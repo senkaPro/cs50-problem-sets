@@ -73,16 +73,18 @@ def buy():
         if cash >= total_amount:
             trans = db.execute("INSERT INTO transactions (user_id,stock,quantity,price_bought) \
                                         VALUES ( :user_id, :stock, :quantity, :price)",
-                        user_id = session["user_id"],
-                        stock = symbol,
-                        quantity = shares,
-                        price = price)
-            if trans == None:
-                return apology("Cannot finish transaction")
+                                                        user_id = session["user_id"],
+                                                        stock = symbol,
+                                                        quantity = shares,
+                                                        price = price)
 
             user = db.execute("UPDATE users SET cash = cash - :amount WHERE id = :id",
                                 amount = total_amount,
                                 id = session["user_id"])
+        else:
+            return apology("Cannot finish transaction")
+
+
 
             flash("Successful transaction!")
         return render_template("layout.html")
