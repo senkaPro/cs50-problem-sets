@@ -56,8 +56,12 @@ def buy():
         data = lookup(symbol)
         shares = request.form.get("shares")
 
-        if shares <= 0 and not shares.isnumeric():
+        if shares <= 0:
             return apology("Must provide positive number of shares")
+        elif not shares.isnumeric():
+            return apology("Must provide numeric value")
+        elif len(shares) < 1:
+            return apology("Value can't be blank")
 
         if data == None:
             return apology("Invalid symbol")
