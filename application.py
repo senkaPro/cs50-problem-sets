@@ -142,22 +142,22 @@ def register():
         confirmation = request.form.get("confirmation")
 
         if not username:
-            return apology("Please provide username", 400)
+            return apology("Please provide username")
         if not password:
-            return apology("Please provide a password",400)
+            return apology("Please provide a password")
         if not confirmation:
-            return apology("Confirm your password", 400)
+            return apology("Confirm your password")
         if password != confirmation:
-            return apology("Your passwords don't match", 400)
+            return apology("Your passwords don't match")
 
         hash = generate_password_hash(password)
 
         user = db.execute("INSERT INTO users (username, hash) VALUES (:username, :hash)",username=username, hash=hash)
         if not user:
-            return apology("User already exist!", 400)
+            return apology("User already exist!")
         session["user_id"] = user
         flash("You successfuly registered!")
-        return render_template('layout.html',200)
+        return render_template('layout.html')
     return render_template("register.html")
 
 
