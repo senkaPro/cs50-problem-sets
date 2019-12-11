@@ -130,7 +130,7 @@ def quote():
         if not data:
             return render_template('quote.html')
 
-        return render_template('quoted.html',name=name,symbol=symbol,price=price)
+        return render_template('quoted.html')
     return render_template('quote.html')
 
 @app.route("/register", methods=["GET", "POST"])
@@ -153,7 +153,7 @@ def register():
     if not user:
         return apology("User already exist!")
     session["user_id"] = user
-    return redirect("/")
+    return render_template('layout.html')
 
 
 @app.route("/sell", methods=["GET", "POST"])
