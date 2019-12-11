@@ -46,7 +46,7 @@ def index():
     """Show portfolio of stocks"""
     data = db.execute("SELECT * FROM users WHERE id= :id", id= session['id'])
 
-    return render_template("index.html")
+    return render_template("index.html", data=data)
 
 
 @app.route("/buy", methods=["GET", "POST"])
