@@ -44,7 +44,9 @@ if not os.environ.get("API_KEY"):
 @login_required
 def index():
     """Show portfolio of stocks"""
-    return render_template("layout.html")
+    user = db.execute("SELECT * FROM users WHERE id= :id", id= session['id'])
+
+    return render_template("index.html")
 
 
 @app.route("/buy", methods=["GET", "POST"])
@@ -83,10 +85,9 @@ def buy():
         cash = db.execute("UPDATE users SET cash = cash - :amount WHERE id = :id",
                             amount = total_amount,
                             id = session["user_id"])
-        user = db.execute("SELECT * FROM users WHERE id= :user_id",user_id = session["user_id"])
-        session["cash"] = user[0]["cash"]
+
         flash("Successful transaction!")
-        return render_template("layout.html")
+        return render_template("layout.html", cash=csh)
 
     if request.method == "GET":
         return render_template("stock.html")
