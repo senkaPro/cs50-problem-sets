@@ -44,7 +44,7 @@ if not os.environ.get("API_KEY"):
 @login_required
 def index():
     """Show portfolio of stocks"""
-    data = db.execute("SELECT * FROM users WHERE id= :id", id= session['id'])
+    data = db.execute("SELECT * FROM users WHERE id= :id", id= session['user_id'])
 
     return render_template("index.html", data=data)
 
@@ -87,7 +87,7 @@ def buy():
                             id = session["user_id"])
 
         flash("Successful transaction!")
-        return render_template("layout.html")
+        return render_template("index.html")
 
     if request.method == "GET":
         return render_template("stock.html")
@@ -195,7 +195,7 @@ def register():
             return apology("User already exist!")
         session["user_id"] = user
         flash("You successfuly registered!")
-        return redirect('/')
+        return render_template("index.html")
     else:
         return render_template("register.html")
 
