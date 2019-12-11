@@ -97,7 +97,7 @@ def login():
         session["user_id"] = rows[0]["id"]
         session["username"] = rows[0]["username"]
         # Redirect user to home page
-        return redirect("/",200)
+        return redirect("/")
 
     # User reached route via GET (as by clicking a link or via redirect)
     else:
@@ -121,41 +121,44 @@ def quote():
     """Get stock quote."""
     if request.method == "POST":
         symbol = request.form.get('symbol')
-        if not symbol or symbol.startswith(["!","?","\\",".","/","@","^","%","*"," ","-","_"]):
-            return apology("try using only letters")
-        data = lookup(symbol)
-        if not data:
-            return apology("No data found")
-        return render_template('quoted.html',data=data)
-    if request.method == "GET":
-        data =  request.args.get("data")
-        if not data:
-            return render_template('quote.html')
 
-        return render_template('quoted.html')
-    return render_template('quote.html')
+        data = lookup(symbol)
+
+        if not data:
+            return apology("Invalid symbol",400)
+
+        return render_template("quoted.html", data=data)
+
+    if request.method == "GET":
+
+        return render_template('quote.html')
 
 @app.route("/register", methods=["GET", "POST"])
 def register():
-    if request.method == "GET":
-        return render_template("register.html")
+    if request.method == "POST":
 
-    username = request.form.get("username")
-    password = request.form.get("password")
-    confirmation = request.form.get("confirmation")
+        username = request.form.get("username")
+        password = request.form.get("password")
+        confirmation = request.form.get("confirmation")
 
-    if not username or not password or not confirmation:
-        return apology("Can't leave inputs blank")
-    if password != confirmation:
-        return apology("Your passwords don't match")
+        if not username:
+            return apology("Please provide username", 400)
+        if not password:
+            return apology("Please provide a password",400)
+        if not confirmation:
+            return apology("Confirm your password", 400)
+        if password != confirmation:
+            return apology("Your passwords don't match", 400)
 
-    phash = generate_password_hash(password)
+        hash = generate_password_hash(password)
 
-    user = db.execute("INSERT INTO users ('username','hash') VALUES (:username, :hash)",username=username, hash=phash)
-    if not user:
-        return apology("User already exist!")
-    session["user_id"] = user
-    return render_template('layout.html')
+        user = db.execute("INSERT INTO users (username, hash) VALUES (:username, :hash)",username=username, hash=hash)
+        if not user:
+            return apology("User already exist!", 400)
+        session["user_id"] = user
+        flash("You successfuly registered!")
+        return redirect('/')
+    return render_template("register.html")
 
 
 @app.route("/sell", methods=["GET", "POST"])
