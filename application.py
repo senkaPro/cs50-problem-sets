@@ -97,7 +97,7 @@ def login():
         session["user_id"] = rows[0]["id"]
         session["username"] = rows[0]["username"]
         # Redirect user to home page
-        return render_template("layout.html")
+        return redirect("/")
 
     # User reached route via GET (as by clicking a link or via redirect)
     else:
@@ -121,6 +121,8 @@ def quote():
     """Get stock quote."""
     if request.method == "POST":
         symbol = request.form.get('symbol')
+        if not symbol or symbol.startswith(["!","?","\\",".","/","@","^","%","*"," ","-","_"]):
+            return apology("try using only letters")
         data = lookup(symbol)
         if not data:
             return apology("No data found")
