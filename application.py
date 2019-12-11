@@ -152,7 +152,6 @@ def register():
     user = db.execute("INSERT INTO users ('username','hash') VALUES (:username, :hash)",username=username, hash=phash)
     if not user:
         return apology("User already exist!")
-    print(user)
     session["user_id"] = user
     return redirect("/")
 
