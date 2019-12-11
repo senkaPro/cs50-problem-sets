@@ -4,6 +4,12 @@
     Buy stock
 {% endblock %}
 
+{% block info %}
+    {% if session.cash %}
+        {{session.cash | usd}}
+    {% endif %}
+{% endblock %}
+
 {% block main %}
     <form action="/buy" method="post">
                 <div class="form-group">
