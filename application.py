@@ -191,7 +191,7 @@ def register():
             return apology("User already exist!")
         session["user_id"] = user
         flash("You successfuly registered!")
-        return render_template('layout.html')
+        return redirect('/')
     else:
         return render_template("register.html")
 
