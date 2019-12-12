@@ -55,7 +55,6 @@ def index():
 
         total += user[0]['cash']
 
-        print(total)
         return render_template("index.html", user=user[0], stocks=stocks, price=cur_price, total=total)
     return render_template("index.html")
 
