@@ -200,7 +200,7 @@ def register():
         user = db.execute("INSERT INTO users (username, hash) VALUES (:username, :hash)",username=username, hash=hash)
         if user == None:
             return apology("User already exist!")
-        session["user_id"] = user
+        session["user_id"] = user[0]['id']
         flash("You successfuly registered!")
         return render_template("index.html")
     else:
