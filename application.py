@@ -1,7 +1,7 @@
 import os
 
 from cs50 import SQL
-from flask import Flask, flash, jsonify, redirect, render_template, request, session
+from flask import Flask, flash, jsonify, redirect, render_template, request, session, url_for
 from flask_session import Session
 from tempfile import mkdtemp
 from werkzeug.exceptions import default_exceptions, HTTPException, InternalServerError
@@ -143,7 +143,7 @@ def login():
         # Remember which user has logged in
         session["user_id"] = rows[0]["id"]
         # Redirect user to home page
-        return render_template("index.html")
+        return redirect(url_for("index"))
 
     # User reached route via GET (as by clicking a link or via redirect)
     else:
@@ -158,7 +158,7 @@ def logout():
     session.clear()
 
     # Redirect user to login form
-    return redirect("/")
+    return redirect(url_for("index"))
 
 
 @app.route("/quote", methods=["GET", "POST"])
@@ -166,7 +166,7 @@ def logout():
 def quote():
     """Get stock quote."""
     if request.method == "POST":
-        symbol = request.form.get('symbol')
+        symbol = request.form.get('symbol').upper()
 
         data = lookup(symbol)
 
@@ -197,12 +197,12 @@ def register():
 
         hash = generate_password_hash(password)
 
-        user = db.execute("INSERT INTO users (username, hash) VALUES (:username, :hash)",username=username, hash=hash)
-        if user == None:
+        new_user = db.execute("INSERT INTO users (username, hash) VALUES (:username, :hash)",username=username, hash=hash)
+        if not new_user:
             return apology("User already exist!")
-        session["user_id"] = user
+        session["user_id"] = new_user
         flash("You successfuly registered!")
-        return render_template("index.html")
+        return redirect(url_for("index"))
     else:
         return render_template("register.html")
 
