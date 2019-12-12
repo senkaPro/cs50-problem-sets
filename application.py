@@ -44,17 +44,27 @@ if not os.environ.get("API_KEY"):
 @login_required
 def index():
     """Show portfolio of stocks"""
-    data = db.execute("SELECT * FROM users WHERE id= :id", id= session['user_id'])
+    if request.method == "GET":
+        stocks = db.execute("SELECT * FROM transactions WHERE user_id= :id GROUP BY stock ORDER BY quantity DESC", id= session['user_id'])
+        user = db.execute("SELECT * FROM users WHERE id = :id", id =session['user_id'])
+        total = 0
+        cur_price = {}
+        for stock in stocks:
+            cur_price[stock['stock']] = lookup(stock['stock'])
+            total += cur_price[stock['stock']]['price'] * stock['quantity']
 
-    return render_template("index.html", data=data)
+        total += user[0]['cash']
 
+        print(total)
+        return render_template("index.html", user=user[0], stocks=stocks, price=cur_price, total=total)
+    return render_template("index.html")
 
 @app.route("/buy", methods=["GET", "POST"])
 @login_required
 def buy():
     """Buy shares of stock"""
     if request.method == "POST":
-        symbol = request.form.get("symbol")
+        symbol = request.form.get("symbol").upper()
         data = lookup(symbol)
         try:
             shares = int(request.form.get("shares"))
@@ -87,7 +97,7 @@ def buy():
                             id = session["user_id"])
 
         flash("Successful transaction!")
-        return render_template("index.html")
+        return redirect("/")
 
     if request.method == "GET":
         return render_template("stock.html")
@@ -134,7 +144,6 @@ def login():
 
         # Remember which user has logged in
         session["user_id"] = rows[0]["id"]
-        session["username"] = rows[0]["username"]
         # Redirect user to home page
         return redirect("/")
 
@@ -190,12 +199,12 @@ def register():
 
         hash = generate_password_hash(password)
 
-        user = db.execute("INSERT INTO users (username, hash) VALUES (:username, :hash)",username=username, hash=hash)
+        user = db.execute("INSERT INTO users username, hash VALUES :username, :hash",username=username, hash=hash)
         if user == None:
             return apology("User already exist!")
         session["user_id"] = user
         flash("You successfuly registered!")
-        return render_template("index.html")
+        return redirect("/")
     else:
         return render_template("register.html")
 

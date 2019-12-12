@@ -48,3 +48,14 @@ main img
 .table{
     padding-top:40px;
 }
+.info{
+    margin-bottom:50px;
+    padding-left:2em;
+    font-size:1.5rem;
+    float:left;
+
+}
+.overlined{
+    text-decoration: overline azure;
+    padding:0.2rem;
+}
