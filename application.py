@@ -44,19 +44,18 @@ if not os.environ.get("API_KEY"):
 @login_required
 def index():
     """Show portfolio of stocks"""
-    if request.method == "GET":
-        stocks = db.execute("SELECT * FROM transactions WHERE user_id= :id GROUP BY stock ORDER BY quantity DESC", id= session['user_id'])
-        user = db.execute("SELECT * FROM users WHERE id = :id", id =session['user_id'])
-        total = 0
-        cur_price = {}
-        for stock in stocks:
-            cur_price[stock['stock']] = lookup(stock['stock'])
-            total += cur_price[stock['stock']]['price'] * stock['quantity']
 
-        total += user[0]['cash']
+    stocks = db.execute("SELECT * FROM transactions WHERE user_id= :id GROUP BY stock ORDER BY quantity DESC", id= session['user_id'])
+    user = db.execute("SELECT * FROM users WHERE id = :id", id =session['user_id'])
+    total = 0
+    cur_price = {}
+    for stock in stocks:
+        cur_price[stock['stock']] = lookup(stock['stock'])
+        total += cur_price[stock['stock']]['price'] * stock['quantity']
 
-        return render_template("index.html", user=user[0], stocks=stocks, price=cur_price, total=total)
-    return render_template("index.html")
+    total += user[0]['cash']
+
+    return render_template("index.html", user=user[0], stocks=stocks, price=cur_price, total=total)
 
 @app.route("/buy", methods=["GET", "POST"])
 @login_required
@@ -198,7 +197,7 @@ def register():
 
         hash = generate_password_hash(password)
 
-        user = db.execute("INSERT INTO users username, hash VALUES :username, :hash",username=username, hash=hash)
+        user = db.execute("INSERT INTO users (username, hash) VALUES (:username, :hash)",username=username, hash=hash)
         if user == None:
             return apology("User already exist!")
         session["user_id"] = user
