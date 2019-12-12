@@ -97,7 +97,7 @@ def buy():
                             id = session["user_id"])
 
         flash("Successful transaction!")
-        return redirect("/")
+        return render_template("index.html")
 
     if request.method == "GET":
         return render_template("stock.html")
@@ -145,7 +145,7 @@ def login():
         # Remember which user has logged in
         session["user_id"] = rows[0]["id"]
         # Redirect user to home page
-        return redirect("/")
+        return render_template("index.html")
 
     # User reached route via GET (as by clicking a link or via redirect)
     else:
@@ -204,7 +204,7 @@ def register():
             return apology("User already exist!")
         session["user_id"] = user
         flash("You successfuly registered!")
-        return redirect("/")
+        return render_template("index.html")
     else:
         return render_template("register.html")
 
