@@ -45,6 +45,7 @@ if not os.environ.get("API_KEY"):
 def index():
     """Show portfolio of stocks"""
 
+
     stocks = db.execute("SELECT * FROM transactions WHERE user_id= :id GROUP BY stock ORDER BY quantity DESC", id= session['user_id'])
     user = db.execute("SELECT * FROM users WHERE id = :id", id =session['user_id'])
     total = 0
@@ -142,6 +143,7 @@ def login():
 
         # Remember which user has logged in
         session["user_id"] = rows[0]["id"]
+        session["user"] = rows
         # Redirect user to home page
         return redirect(url_for("index"))
 
