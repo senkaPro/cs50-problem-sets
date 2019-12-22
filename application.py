@@ -84,13 +84,12 @@ def buy():
         if total_amount > cash:
             return apology("Cannot finish transaction")
 
-        trans = db.execute("INSERT INTO transactions (user_id,stock,quantity,price_bought,state) \
-                                    VALUES ( :user_id, :stock, :quantity, :price, :state)",
+        trans = db.execute("INSERT INTO transactions (user_id,stock,quantity,price_bought) \
+                                    VALUES ( :user_id, :stock, :quantity, :price)",
                                                     user_id = session["user_id"],
                                                     stock = symbol,
                                                     quantity = shares,
-                                                    price = price,
-                                                    state=True)
+                                                    price = price)
 
         cash = db.execute("UPDATE users SET cash = cash - :amount WHERE id = :id",
                             amount = total_amount,
@@ -242,21 +241,9 @@ def sell():
         db.execute("UPDATE users SET cash= cash + :price WHERE id= :user_id", user_id=session['user_id'], price= total_price)
 
         db.execute("UPDATE transactions SET quantity= quantity - :quantity WHERE user_id= :user_id AND stock= :stock ", quantity= shares, user_id=session['user_id'], stock=symbol)
-
-        db.execute("INSERT INTO transactions (user_id,stock,quantity,price_bought,state) \
-                                    VALUES ( :user_id, :stock, :quantity, :price, :state)",
-                                                    user_id = session["user_id"],
-                                                    stock = symbol,
-                                                    quantity = shares,
-                                                    price = price,
-                                                    state=False)
-
-
         trans = db.execute("DELETE FROM transactions WHERE user_id = :id AND quantity < 1", id=session['user_id'])
 
-
-        flash("Successful transaction!")
-
+        flash("Transaction successful!")
         return redirect(url_for('index'))
     else:
         q = db.execute("SELECT * FROM transactions WHERE user_id= :id ORDER BY quantity DESC", id= session['user_id'])
