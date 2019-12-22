@@ -1,0 +1,41 @@
+{% extends "layout.html" %}
+
+{% block title %}
+    History
+{% endblock %}
+
+{% block main %}
+<div class="container table">
+    <ul class="list-inline info">
+      <li class="list-inline-item overlined">{{ user.username | upper }}</li>
+      <li class="list-inline-item overlined">Cash: {{ user.cash  }}</li>
+    </ul>
+
+<table class="table">
+  <thead>
+    <tr>
+      <th scope="col">Stock</th>
+      <th scope="col">Amount</th>
+      <th scope="col">Current price</th>
+      <th scope="col">Time bought</th>
+    </tr>
+  </thead>
+  <tbody>
+      {% for stock in q %}
+          <tr>
+              <td>{{ stock.stock | upper}}</td>
+              {% if stock.state == True  %}
+                <td>Bought</td>
+              {% else  %}
+                <td>Sold</td>
+              {% endif  %}
+              <td>{{ stock.quantity }}</td>
+              <td>{{ stock.price_bought | usd }}</td>
+              <td>{{ stock.timestamp }}</td>
+          </tr>
+      {% endfor %}
+  </tbody>
+</table>
+
+</div>
+{% endblock %}
