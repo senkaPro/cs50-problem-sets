@@ -46,7 +46,7 @@ def index():
     """Show portfolio of stocks"""
 
 
-    stocks = db.execute("SELECT * FROM transactions WHERE user_id= :id GROUP BY stock ORDER BY quantity DESC", id= session['user_id'])
+    stocks = db.execute("SELECT * FROM transactions WHERE user_id= :id GROUP BY stock", id= session['user_id'])
     user = db.execute("SELECT * FROM users WHERE id = :id", id =session['user_id'])
     total = 0
     cur_price = {}
@@ -213,7 +213,35 @@ def register():
 @login_required
 def sell():
     """Sell shares of stock"""
-    return apology("TODO")
+
+    if request.method == "POST":
+        symbol = request.form.get('symbol')
+        if not symbol:
+            return apology("Invalid symbol!")
+        try:
+            shares = int(request.form.get('shares'))
+            if shares <= 0:
+                return apology("Must enter a positive number of shares")
+        except:
+            return apology("Invalid value of shares")
+        data = lookup(symbol)
+        price = data['price']
+        total_price = shares * price
+        tr = db.execute("SELECT * FROM transactions WHERE user_id= :user_id AND stock= :stock", user_id = session["user_id"], stock=symbol)
+        if tr[0]['quantity'] < shares or tr[0]['quantity'] < 1:
+            return apology('You don\'t have enough shares to sell')
+
+        db.execute("UPDATE users SET cash= cash + :price WHERE id= :user_id", user_id=session['user_id'], price= total_price)
+
+        db.execute("UPDATE transactions SET quantity= quantity - :quantity WHERE user_id= :user_id AND stock= :stock ", quantity= shares, user_id=session['user_id'], stock=symbol)
+        trans = db.execute("SELECT * FROM transactions WHERE user_id = :id AND stock= :stock", id=session['user_id'], stock=symbol)
+        print(trans)
+            #db.execute("DELETE FROM transactions WHERE user_id= :id AND stock = :stock", id=session['user_id'], stock=symbol)
+        return redirect(url_for('index'))
+    else:
+        q = db.execute("SELECT * FROM transactions WHERE user_id= :id ORDER BY quantity DESC", id= session['user_id'])
+        return render_template("sell.html", q=q)
+    return render_template("sell.html")
 
 
 def errorhandler(e):
