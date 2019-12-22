@@ -5,9 +5,10 @@
 {% endblock %}
 
 {% block main %}
-    <form action="/register" method="post">
+
+    <form action="/register" method="post" id="register_form">
         <div class="form-group">
-            <input autocomplete="off" autofocus class="form-control" name="username" placeholder="Username" type="text">
+            <input autocomplete="off" autofocus class="form-control" name="username" id="username" placeholder="Username" type="text">
         </div>
         <div class="form-group">
             <input class="form-control" name="password" placeholder="Password" type="password">
@@ -17,4 +18,25 @@
         </div>
         <button class="btn btn-primary" type="submit">Register</button>
     </form>
+{% endblock %}
+{% block scripts %}
+<script>
+let username = document.getElementById("username")
+let myForm = document.getElementById('register_form');
+console.log(username)
+console.log(myForm)
+myForm.onsubmit = function() {
+    $.get('/check?username=' + username, function(data){
+        if (data == false) {
+            myForm.preventDefault();
+            alert('Username taken!');
+        }
+        else {
+            myForm.submit();
+        }
+    });
+}
+</script>
+
+
 {% endblock %}
