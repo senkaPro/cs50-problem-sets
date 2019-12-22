@@ -1,0 +1,39 @@
+{% extends "layout.html" %}
+
+{% block title %}
+    Home
+{% endblock %}
+
+{% block main %}
+<div class="container table">
+    <ul class="list-inline info">
+      <li class="list-inline-item overlined">{{ user.username | upper }}</li>
+      <li class="list-inline-item overlined">Cash: {{ user.cash | usd }}</li>
+      <li class="list-inline-item overlined">Total: {{total | usd}} </li>
+    </ul>
+
+<table class="table">
+  <thead>
+    <tr>
+      <th scope="col">Stock</th>
+      <th scope="col">Amount</th>
+      <th scope="col">Current price</th>
+      <th scope="col">Total Value</th>
+      <th scope="col">Time bought</th>
+    </tr>
+  </thead>
+  <tbody>
+      {% for stock in stocks %}
+          <tr>
+              <td>{{ stock.stock | upper}}</td>
+              <td>{{ stock.quantity }}</td>
+              <td>{{ price[stock.stock]['price'] | usd }}</td>
+              <td>{{ (price[stock.stock]['price'] * stock.quantity) | usd }}</td>
+              <td>{{ stock.timestamp }}</td>
+          </tr>
+      {% endfor %}
+  </tbody>
+</table>
+
+</div>
+{% endblock %}
