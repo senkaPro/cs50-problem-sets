@@ -23,6 +23,7 @@ def after_request(response):
     response.headers["Pragma"] = "no-cache"
     return response
 
+
 # Custom filter
 app.jinja_env.filters["usd"] = usd
 
@@ -45,9 +46,8 @@ if not os.environ.get("API_KEY"):
 def index():
     """Show portfolio of stocks"""
 
-
-    stocks = db.execute("SELECT * FROM transactions WHERE user_id= :id GROUP BY stock", id= session['user_id'])
-    user = db.execute("SELECT * FROM users WHERE id = :id", id =session['user_id'])
+    stocks = db.execute("SELECT * FROM transactions WHERE user_id= :id GROUP BY stock", id=session['user_id'])
+    user = db.execute("SELECT * FROM users WHERE id = :id", id=session['user_id'])
     total = 0
     cur_price = {}
     for stock in stocks:
@@ -58,6 +58,7 @@ def index():
 
     return render_template("index.html", user=user[0], stocks=stocks, price=cur_price, total=total)
 
+
 @app.route("/buy", methods=["GET", "POST"])
 @login_required
 def buy():
@@ -65,7 +66,7 @@ def buy():
     if request.method == "POST":
         symbol = request.form.get("symbol").upper()
         data = lookup(symbol)
-        user = db.execute("SELECT cash FROM users WHERE id= :user_id",user_id=session["user_id"])
+        user = db.execute("SELECT cash FROM users WHERE id= :user_id", user_id=session["user_id"])
         try:
             shares = int(request.form.get("shares"))
         except:
@@ -86,14 +87,14 @@ def buy():
 
         trans = db.execute("INSERT INTO transactions (user_id,stock,quantity,price_bought) \
                                     VALUES ( :user_id, :stock, :quantity, :price)",
-                                                    user_id = session["user_id"],
-                                                    stock = symbol,
-                                                    quantity = shares,
-                                                    price = price)
+                           user_id=session["user_id"],
+                           stock=symbol,
+                           quantity=shares,
+                           price=price)
 
         cash = db.execute("UPDATE users SET cash = cash - :amount WHERE id = :id",
-                            amount = total_amount,
-                            id = session["user_id"])
+                          amount=total_amount,
+                          id=session["user_id"])
 
         flash("Successful transaction!")
         return redirect(url_for("index"))
@@ -105,7 +106,7 @@ def buy():
 @app.route("/check", methods=["GET"])
 def check():
     """Return true if username available, else false, in JSON format"""
-    username= request.args.get('username')
+    username = request.args.get('username')
     q = db.execute("SELECT * FROM users WHERE username= :username", username=username)
     if len(q) > 0:
         return jsonify(False)
@@ -187,6 +188,7 @@ def quote():
     if request.method == "GET":
         return render_template('quote.html')
 
+
 @app.route("/register", methods=["GET", "POST"])
 def register():
     if request.method == "POST":
@@ -206,7 +208,7 @@ def register():
 
         hash = generate_password_hash(password)
 
-        new_user = db.execute("INSERT INTO users (username, hash) VALUES (:username, :hash)",username=username, hash=hash)
+        new_user = db.execute("INSERT INTO users (username, hash) VALUES (:username, :hash)", username=username, hash=hash)
         if not new_user:
             return apology("User already exist!")
         session["user_id"] = new_user
@@ -234,19 +236,25 @@ def sell():
         data = lookup(symbol)
         price = data['price']
         total_price = shares * price
-        tr = db.execute("SELECT * FROM transactions WHERE user_id= :user_id AND stock= :stock", user_id = session["user_id"], stock=symbol)
+        tr = db.execute("SELECT * FROM transactions WHERE user_id= :user_id AND stock= :stock",
+                        user_id=session["user_id"],
+                        stock=symbol)
+
         if tr[0]['quantity'] < shares or tr[0]['quantity'] < 1:
             return apology('You don\'t have enough shares to sell')
 
-        db.execute("UPDATE users SET cash= cash + :price WHERE id= :user_id", user_id=session['user_id'], price= total_price)
+        db.execute("UPDATE users SET cash= cash + :price WHERE id= :user_id", user_id=session['user_id'], price=total_price)
 
-        db.execute("UPDATE transactions SET quantity= quantity - :quantity WHERE user_id= :user_id AND stock= :stock ", quantity= shares, user_id=session['user_id'], stock=symbol)
+        db.execute("UPDATE transactions SET quantity= quantity - :quantity WHERE user_id= :user_id AND stock= :stock ",
+                   quantity=shares,
+                   user_id=session['user_id'],
+                   stock=symbol)
         trans = db.execute("DELETE FROM transactions WHERE user_id = :id AND quantity < 1", id=session['user_id'])
 
         flash("Transaction successful!")
         return redirect(url_for('index'))
     else:
-        q = db.execute("SELECT * FROM transactions WHERE user_id= :id ORDER BY quantity DESC", id= session['user_id'])
+        q = db.execute("SELECT * FROM transactions WHERE user_id= :id ORDER BY quantity DESC", id=session['user_id'])
         return render_template("sell.html", q=q)
     return render_template("sell.html")
 
