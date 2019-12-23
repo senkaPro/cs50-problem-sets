@@ -19,24 +19,29 @@
         <button class="btn btn-primary" type="submit">Register</button>
     </form>
 {% endblock %}
-{% block scripts %}
-<script>
-let username = document.getElementById("username")
-let myForm = document.getElementById('register_form');
-console.log(username)
-console.log(myForm)
-myForm.onsubmit = function() {
-    $.get('/check?username=' + username, function(data){
-        if (data == false) {
-            myForm.preventDefault();
-            alert('Username taken!');
-        }
-        else {
-            myForm.submit();
-        }
-    });
-}
-</script>
 
+{% block scripts %}
+<script
+  src="https://code.jquery.com/jquery-3.4.1.js"
+  integrity="sha256-WpOohJOqMqqyKL9FccASB9O0KwACQJpFTUBLTYOVvVU="
+  crossorigin="anonymous"></script>
+<script>
+ let register_form = document.querySelector("#register_form");
+ register_form.addEventListener("submit", function(event){
+
+     event.preventDefault();
+
+     let username = $("#username").val();
+
+     $.get("check?username=" + username, function(data){
+         if (data == false){
+             alert("Username already excist!");
+         }else{
+             $("#register_form").submit();
+         }
+     });
+ });
+
+</script>
 
 {% endblock %}
