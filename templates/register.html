@@ -1,0 +1,47 @@
+{% extends "layout.html" %}
+
+{% block title %}
+    Register account
+{% endblock %}
+
+{% block main %}
+
+    <form action="/register" method="post" id="register_form">
+        <div class="form-group">
+            <input autocomplete="off" autofocus class="form-control" name="username" id="username" placeholder="Username" type="text">
+        </div>
+        <div class="form-group">
+            <input class="form-control" name="password" placeholder="Password" type="password">
+        </div>
+        <div class="form-group">
+            <input class="form-control" name="confirmation" placeholder="Confirm password" type="password">
+        </div>
+        <button class="btn btn-primary" type="submit">Register</button>
+    </form>
+{% endblock %}
+
+{% block scripts %}
+<script
+  src="https://code.jquery.com/jquery-3.4.1.js"
+  integrity="sha256-WpOohJOqMqqyKL9FccASB9O0KwACQJpFTUBLTYOVvVU="
+  crossorigin="anonymous"></script>
+<script>
+ let register_form = document.querySelector("#register_form");
+ register_form.addEventListener("submit", function(event){
+
+     event.preventDefault();
+
+     let username = $("#username").val();
+
+     $.get("check?username=" + username, function(data){
+         if (data == false){
+             alert("Username already excist!");
+         }else{
+             $("#register_form").submit();
+         }
+     });
+ });
+
+</script>
+
+{% endblock %}
