@@ -147,13 +147,13 @@ void tabulate(void)
     {
         int col = 0;
 
-        if(!candidates[preferences[i][col]].eliminated)
+        if (!candidates[preferences[i][col]].eliminated)
         {
             candidates[preferences[i][col]].votes++;
         }
         else
         {
-            candidates[preferences[i][col+1]].votes++;
+            candidates[preferences[i][col + 1]].votes++;
         }
     }
     return;
@@ -171,7 +171,7 @@ bool print_winner(void)
         {
             if (candidates[j].votes >= winn)
             {
-                fprintf(stdout, "%s\n",candidates[j].name);
+                fprintf(stdout, "%s\n", candidates[j].name);
                 return true;
             }
         }
