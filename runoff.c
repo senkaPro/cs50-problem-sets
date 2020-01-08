@@ -169,7 +169,7 @@ bool print_winner(void)
     {
         if (candidates[i].votes >= winn)
         {
-            stdout("%s", candidates[i].name);
+            fprintf(stdout, "%s", candidates[i].name);
             return true;
         }
         return false;
