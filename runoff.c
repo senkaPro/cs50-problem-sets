@@ -165,14 +165,16 @@ bool print_winner(void)
     int winn;
     winn = floor(voter_count / 2) + 1;
 
-    for (int i = 0; i < candidate_count; i++)
+    for (int i = 0; i < voter_count; i++)
     {
-        if (candidates[i].votes == winn)
+        for (int j = 0; j < candidate_count; j++)
         {
-            fprintf(stdout, "%s", candidates[i].name);
-            return true;
+            if (candidates[j].votes >= winn)
+            {
+                fprintf(stdout, "%s\n",candidates[j].name);
+                return true;
+            }
         }
-        return false;
     }
 
     return false;
