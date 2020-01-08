@@ -165,7 +165,7 @@ bool print_winner(void)
     int winn;
     winn = (voter_count / 2) + 1;
 
-    for (int i = 0; i < candidates_count; i++)
+    for (int i = 0; i < candidate_count; i++)
     {
         if (candidates[i].votes >= winn)
         {
