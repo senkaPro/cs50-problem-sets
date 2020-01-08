@@ -149,11 +149,11 @@ void tabulate(void)
 
         if(!candidates[preferences[i][col]].eliminated)
         {
-          candidates[preferences[i][col]].votes++;
+            candidates[preferences[i][col]].votes++;
         }
         else
         {
-          candidates[preferences[i][col+1]].votes++;
+            candidates[preferences[i][col+1]].votes++;
         }
     }
     return;
@@ -162,7 +162,19 @@ void tabulate(void)
 // Print the winner of the election, if there is one
 bool print_winner(void)
 {
-    // TODO
+    int winn;
+    winn = (voter_count / 2) + 1;
+
+    for (int i = 0; i < candidates_count; i++)
+    {
+        if (candidates[i].votes >= winn)
+        {
+            stdout("%s", candidates[i].name);
+            return true;
+        }
+        return false;
+    }
+
     return false;
 }
 
