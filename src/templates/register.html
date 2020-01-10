@@ -1,0 +1,93 @@
+{% extends "base.html" %}
+{%block links %}<link href="https://cdnjs.cloudflare.com/ajax/libs/mdbootstrap/4.10.1/css/mdb.min.css" rel="stylesheet">{% endblock %}
+{% block headscripts %}<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mdbootstrap/4.10.1/js/mdb.min.js"></script>{% endblock %}
+{% block title %}Register - {{super()}}{% endblock %}
+{% block body %}
+<div class="col-md-4 offset-4">
+<!-- Material form register -->
+<div class="card" style="margin-top:60px;">
+
+    <h5 class="card-header info-color white-text text-center py-4">
+        <strong>Sign up</strong>
+    </h5>
+
+    <!--Card content-->
+    <div class="card-body px-lg-5 pt-0">
+
+        <!-- Form -->
+        <form class="text-center" style="color: #757575;" action="{{url_for('register')}}" method="post">
+            <!-- E-mail -->
+            <div class="md-form ">
+                <input type="text" name="username" id="materialRegisterFormEmail" class="form-control">
+                <label for="materialRegisterFormEmail">Username</label>
+            </div>
+
+            <!-- Password -->
+            <div class="md-form">
+                <input type="password" name="password" id="materialRegisterFormPassword" class="form-control" aria-describedby="materialRegisterFormPasswordHelpBlock">
+                <label for="materialRegisterFormPassword">Password</label>
+                <small id="materialRegisterFormPasswordHelpBlock" class="form-text text-muted mb-4">
+                    At least 8 characters and 1 digit
+                </small>
+            </div>
+             <!-- Password Confirm -->
+            <div class="md-form">
+                <input type="password" name="password1" id="materialRegisterFormPassword1" class="form-control" aria-describedby="materialRegisterFormPasswordHelpBlock">
+                <label for="materialRegisterFormPassword1">Confirm password</label>
+                <small id="materialRegisterFormPasswordHelpBlock1" class="form-text text-muted mb-4">
+                    Confirm your password
+                </small>
+            </div>
+
+            <!-- Phone number
+            <div class="md-form">
+                <input type="password" id="materialRegisterFormPhone" class="form-control" aria-describedby="materialRegisterFormPhoneHelpBlock">
+                <label for="materialRegisterFormPhone">Phone number</label>
+                <small id="materialRegisterFormPhoneHelpBlock" class="form-text text-muted mb-4">
+                    Optional - for two step authentication
+                </small>
+            </div>
+            -->
+
+            <!-- Newsletter
+            <div class="form-check">
+                <input type="checkbox" class="form-check-input" id="materialRegisterFormNewsletter">
+                <label class="form-check-label" for="materialRegisterFormNewsletter">Subscribe to our newsletter</label>
+            </div>
+            -->
+
+            <!-- Sign up button -->
+            <button class="btn btn-outline-info btn-rounded btn-block my-4 waves-effect z-depth-0" type="submit">Sign up</button>
+
+            <!-- Social register
+            <p>or sign up with:</p>
+
+            <a type="button" class="btn-floating btn-fb btn-sm">
+                <i class="fab fa-facebook-f"></i>
+            </a>
+            <a type="button" class="btn-floating btn-tw btn-sm">
+                <i class="fab fa-twitter"></i>
+            </a>
+            <a type="button" class="btn-floating btn-li btn-sm">
+                <i class="fab fa-linkedin-in"></i>
+            </a>
+            <a type="button" class="btn-floating btn-git btn-sm">
+                <i class="fab fa-github"></i>
+            </a>
+            -->
+            <hr>
+
+            <!-- Terms of service -->
+            <p>By clicking
+                <em>Sign up</em> you agree to our
+                <a href="{{url_for('terms')}}" target="_blank">terms of service</a>
+
+        </form>
+        <!-- Form -->
+
+    </div>
+
+</div>
+<!-- Material form register -->
+</div>
+{% endblock body %}

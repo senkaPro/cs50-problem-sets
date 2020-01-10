@@ -1,0 +1,43 @@
+{% extends "base.html" %}
+{%block links %}<link href="https://cdnjs.cloudflare.com/ajax/libs/mdbootstrap/4.10.1/css/mdb.min.css" rel="stylesheet">{% endblock %}
+{% block jumbotron %}
+<div class="example z-depth-3">
+    <div class="jumbotron jumbotron-fluid">
+        <div class="container">
+            <div class="row">
+                <div class="col-sm-5 offset-1">
+                    <h1 class="display-4">short50</h1>
+                    <p class="lead"><strong>Your best URL friend.</strong></p>
+                    <p class="lead"><strong>Get recognized, try it now...</strong></p>
+                    <span>
+                        <i class="fas fa-chart-bar"></i>
+                        <i class="fas fa-cogs"></i>
+                        <i class="fas fa-cut"></i>
+                        <i class="fas fa-magic"></i>
+                        <i class="fas fa-sort-amount-up"></i>
+                    </span>
+                </div>
+                <div class="col-sm-4 offset-1">
+                    <p style="text-align:center">Shortening, branding and promoting your urls with our services Lorem ipsum dolor sit amet,
+                    consectetur adipiscing elit, sed do eiusmod tempor incididunt ut
+                    labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock jumbotron %}
+{% block body%}
+
+<div class="col-sm-4 offset-4">
+    <a href="{{url_for('register')}}"><button class="btn blue-gradient" style="width:100%; margin-top:3rem;margin-bottom:3rem;">Start shortening your links</button></a>
+</div>
+<div class="col-sm-6 offset-3">
+    <p class="text-center">
+    Register and start using our URL shortening service.Share your custom links and become known more.Market your product and get recognized with our custom links creator.
+    Don't wait and start using our services now, you still not <a href="{{url_for('register')}}">Registered ?</a>
+    </p>
+</div>
+</div>
+{% endblock %}
